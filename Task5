@@ -1,1 +1,74 @@
+import random
 
+class QuizGame:
+    def __init__(self, questions):
+        self.questions = questions
+        self.score = 0
+
+    def welcome_message(self):
+        print("Welcome to the Quiz Game!")
+        print("Rules: Answer multiple-choice or fill-in-the-blank questions.")
+
+    def load_questions(self):
+        random.shuffle(self.questions)
+
+    def present_question(self, question):
+        print("\nQuestion:", question['text'])
+        if question['type'] == 'multiple_choice':
+            for i, choice in enumerate(question['choices'], start=1):
+                print(f"{i}. {choice}")
+        elif question['type'] == 'fill_in_the_blank':
+            print("Fill in the blank.")
+
+    def evaluate_answer(self, question, user_answer):
+        correct_answer = question['answer']
+        if user_answer == correct_answer:
+            print("Correct!")
+            self.score += 1
+        else:
+            print("Incorrect. The correct answer is:", correct_answer)
+
+    def display_final_results(self):
+        print("\nFinal Score:", self.score)
+        print("Thanks for playing!")
+
+    def play_game(self):
+        self.welcome_message()
+
+        play_again = 'yes'
+        while play_again.lower() == 'yes':
+            self.load_questions()
+            self.score = 0
+
+            for question in self.questions:
+                self.present_question(question)
+                user_answer = input("Your answer: ")
+                self.evaluate_answer(question, user_answer)
+
+            self.display_final_results()
+            play_again = input("Do you want to play again? (yes/no): ")
+
+if __name__ == "__main__":
+    quiz_questions = [
+        {
+            'text': 'What is the capital of France?',
+            'type': 'multiple_choice',
+            'choices': ['Berlin', 'Paris', 'London', 'Rome'],
+            'answer': 'Paris'
+        },
+        {
+            'text': 'The largest planet in our solar system is?',
+            'type': 'multiple_choice',
+            'choices': ['Earth', 'Jupiter', 'Mars', 'Venus'],
+            'answer': 'Jupiter'
+        },
+        {
+            'text': 'The formula for water is H2O. What does H stand for?',
+            'type': 'fill_in_the_blank',
+            'answer': 'Hydrogen'
+        }
+      
+    ]
+
+    game = QuizGame(quiz_questions)
+    game.play_game()
